@@ -41,6 +41,7 @@ Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'SirVer/ultisnips'
 Plug 'dense-analysis/ale'
+Plug 'tpope/vim-surround'
 
 call plug#end()
 
