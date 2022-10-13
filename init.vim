@@ -1,3 +1,8 @@
+syntax on
+
+"leader key
+let mapleader = " "
+
 set nocompatible            " disable compatibility to old-time vi
 set showmatch               " show matching 
 set ignorecase              " case insensitive 
@@ -15,22 +20,60 @@ set wildmode=longest,list   " get bash-like tab completions
 set cc=80                  " set an 80 column border for good coding style
 filetype plugin indent on   "allow auto-indenting depending on file type
 syntax on                   " syntax highlighting
-set clipboard=unnamedplus   " using system clipboard
 filetype plugin on
 set cursorline              " highlight current cursorline
 set ttyfast                 " Speed up scrolling in Vim
 " set spell                 " enable spell check (may need to download language package)
 " set noswapfile            " disable creating swap file
 " set backupdir=~/.cache/vim " Directory to store backup files.
+"smart search
+set ignorecase
+set smartcase
+"
+""smart wrapping
+
+set formatoptions-=cro
+set wrap
+set textwidth=79
+set formatoptions=qrn1
+
+"search as characters are entered
+set incsearch"
+
+"keybindings
+""<CR> is a carrige return(?)
+"remove highlighting (no highlight is the idea I am going for here)
+nnoremap <leader>nh :noh<CR>
+""open terminal
+nnoremap <leader>t :term<CR>
+
+nnoremap <leader>y "*y
+"Put from system clipboard
+nnoremap <leader>p "*p
+xnoremap <expr> p 'pgv"'.v:register.'y`>'
+xnoremap <expr> P 'Pgv"'.v:register.'y`>'
+
+nnoremap <leader>sh <Esc>:syntax sync clear<CR> 
+
+
+if empty(glob('~/.vim/autoload/plug.vim'))
+      silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+
 
 call plug#begin('~/.config/nvim/plugged')
+
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop'  }
+
+Plug 'pearofducks/ansible-vim'
 
 Plug 'alvan/vim-closetag' " closing tags for html
 Plug 'dracula/vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'scrooloose/nerdtree'
 Plug 'mhinz/vim-startify'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-commentary'
@@ -43,8 +86,55 @@ Plug 'SirVer/ultisnips'
 Plug 'dense-analysis/ale'
 Plug 'tpope/vim-surround'
 
+Plug 'chikamichi/mediawiki.vim'
+
+Plug 'flazz/vim-colorschemes'
+
+Plug 'https://github.com/nathanaelkane/vim-indent-guides'
+
+Plug 'https://github.com/machakann/vim-highlightedyank'
+
+Plug 'https://github.com/junegunn/goyo.vim'
+
+Plug 'diepm/vim-rest-console'
+
+Plug 'scrooloose/nerdtree'
+
+Plug 'https://github.com/hashivim/vim-terraform.git'
+
 call plug#end()
 
+let g:gruvbox_guisp_fallback = "bg"
+
+"needed for italics, only works in some terminals
+let g:gruvbox_italic=1 
+""change to the change coloursheme to whaever I prefer at the time 
+set background=dark
+"not sure if this is needed or not, or even if it works. Might just be default
+""iunno lol
+set statusline=%F[%L][%{&ff}]%y[%04l,%04v]
+
+
+"hide the options in gvim
+set guioptions=aci
+
+setlocal spell spelllang=en_us
+setlocal spell!
+
+let g:netrw_banner = 0
+
+colorscheme gruvbox
+" Security options
+set nomodeline
+"
+" " Don't mark word_word as a markdown error
+hi link markdownError Normal
+"
+"
+""pymode
+
+" This stops that stupid error window popping up everywhere on every buffer
+let g:pymode_lint_cwindow = 0"
 
 " color schemes
 if (has("termguicolors"))
@@ -52,7 +142,6 @@ if (has("termguicolors"))
 endif
 syntax enable
 " colorscheme evening
-colorscheme dracula
 " open new split panes to right and below
 set splitright
 set splitbelow
